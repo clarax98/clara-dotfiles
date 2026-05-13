@@ -1,0 +1,110 @@
+# ─────────────────────────────────────────
+#  Paleta Catppuccin Mocha
+# ─────────────────────────────────────────
+palette = "catppuccin_mocha"
+
+[palettes.catppuccin_mocha]
+rosewater = "#f5e0dc"
+flamingo  = "#f2cdcd"
+pink      = "#f5c2e7"
+mauve     = "#cba6f7"
+red       = "#f38ba8"
+maroon    = "#eba0ac"
+peach     = "#fab387"
+yellow    = "#f9e2af"
+green     = "#a6e3a1"
+teal      = "#94e2d5"
+sky       = "#89dceb"
+sapphire  = "#74c7ec"
+blue      = "#89b4fa"
+lavender  = "#b4befe"
+text      = "#cdd6f4"
+subtext1  = "#bac2de"
+overlay2  = "#9399b2"
+surface1  = "#45475a"
+
+# ─────────────────────────────────────────
+#  Formato general (dos líneas)
+# ─────────────────────────────────────────
+format = """
+$directory$git_branch$git_status$python$nodejs$rust$golang$java\
+$cmd_duration
+$character"""
+
+# ─────────────────────────────────────────
+#  Directorio
+# ─────────────────────────────────────────
+[directory]
+format = "[ $path ]($style)"
+style = "bold fg:blue"
+truncation_length = 3
+truncate_to_repo = true
+read_only = " 󰌾"
+
+# ─────────────────────────────────────────
+#  Git
+# ─────────────────────────────────────────
+[git_branch]
+format = "[ $symbol$branch ]($style)"
+symbol = " "
+style = "bold fg:mauve"
+
+[git_status]
+format = "[$all_status$ahead_behind]($style) "
+style = "bold fg:red"
+conflicted = "󰩌 "
+ahead = "⇡${count} "
+behind = "⇣${count} "
+diverged = "⇕⇡${ahead_count}⇣${behind_count} "
+untracked = "? "
+stashed = " "
+modified = "! "
+staged = "+ "
+renamed = "» "
+deleted = "✘ "
+
+# ─────────────────────────────────────────
+#  Lenguajes
+# ─────────────────────────────────────────
+[python]
+format = "[ $symbol$version ]($style)"
+symbol = " "
+style = "bold fg:yellow"
+detect_files = ["requirements.txt", "pyproject.toml", ".python-version", "*.py"]
+
+[nodejs]
+format = "[ $symbol$version ]($style)"
+symbol = " "
+style = "bold fg:green"
+
+[rust]
+format = "[ $symbol$version ]($style)"
+symbol = " "
+style = "bold fg:peach"
+
+[golang]
+format = "[ $symbol$version ]($style)"
+symbol = " "
+style = "bold fg:sky"
+
+[java]
+format = "[ $symbol$version ]($style)"
+symbol = " "
+style = "bold fg:red"
+
+# ─────────────────────────────────────────
+#  Duración del comando (solo si > 2s)
+# ─────────────────────────────────────────
+[cmd_duration]
+format = "[ 󱦟 $duration ]($style)"
+style = "bold fg:overlay2"
+min_time = 2000
+show_milliseconds = false
+
+# ─────────────────────────────────────────
+#  Prompt (❯)
+# ─────────────────────────────────────────
+[character]
+success_symbol = "[❯](bold fg:green)"
+error_symbol = "[❯](bold fg:red)"
+vimcmd_symbol = "[❮](bold fg:mauve)"

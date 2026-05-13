@@ -1,42 +1,32 @@
 # ─────────────────────────────────────────
 #  Shell
 # ─────────────────────────────────────────
-command = /bin/zsh
-shell-integration = zsh
+shell-integration = fish
 
 # ─────────────────────────────────────────
-#  Fuente (igual que Omarchy)
+#  Fuente
 # ─────────────────────────────────────────
-font-family = "JetBrainsMonoNL Nerd Font Mono"
-font-style = Regular
-font-style-bold = Bold
-font-style-italic = Italic
-font-style-bold-italic = Bold Italic
-font-size = 13
+font-family = JetBrainsMono Nerd Font
+font-size = 12
 
 # ─────────────────────────────────────────
 #  Tema
 # ─────────────────────────────────────────
-theme = dark:Catppuccin Mocha,light:Catppuccin Latte
+theme = TokyoNight
 
 # ─────────────────────────────────────────
 #  Ventana
 # ─────────────────────────────────────────
-window-padding-x = 14
-window-padding-y = 14
-confirm-close-surface = false
-resize-overlay = never
+gtk-titlebar = false
+background-opacity = 0.92
 
 # ─────────────────────────────────────────
-#  Cursor (estilo Omarchy)
+#  Cursor
 # ─────────────────────────────────────────
-cursor-style = block
-cursor-style-blink = false
-shell-integration-features = no-cursor
+cursor-style = bar
 
 # ─────────────────────────────────────────
 #  Ratón y clipboard
 # ─────────────────────────────────────────
 copy-on-select = clipboard
 mouse-hide-while-typing = true
-minimum-contrast = 1.05

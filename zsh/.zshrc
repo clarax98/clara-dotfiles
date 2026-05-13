@@ -6,9 +6,15 @@ export ZSH="$HOME/.oh-my-zsh"
 # Sin tema propio — Starship se encarga del prompt
 ZSH_THEME=""
 
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
+plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
+
+# ─────────────────────────────────────────
+#  Plugins (instalados via pacman)
+# ─────────────────────────────────────────
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # ─────────────────────────────────────────
 #  Historial
@@ -50,13 +56,15 @@ alias la="eza -a --icons"
 alias lt="eza --tree --icons"
 alias cat="bat"
 alias grep="rg"
-alias cd="z"         # zoxide reemplaza cd
+alias cd="z"
 alias ..="cd .."
 alias ...="cd ../.."
 
 # ─────────────────────────────────────────
 #  Editor
 # ─────────────────────────────────────────
-export EDITOR="nvim"
-export VISUAL="nvim"
+export EDITOR="nano"
+export VISUAL="nano"
 export PATH="$HOME/.local/bin:$PATH"
+
+numlockx on

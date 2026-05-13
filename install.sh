@@ -25,15 +25,28 @@ ERRORS=0
 # ─────────────────────────────────────────
 header "── Comprobando dependencias ──────────────────────"
 
-DEPS=(ghostty zsh starship eza zoxide fzf bat ripgrep numlockx)
+# formato: "comando:paquete"
+DEPS=(
+    "ghostty:ghostty"
+    "zsh:zsh"
+    "starship:starship"
+    "eza:eza"
+    "zoxide:zoxide"
+    "fzf:fzf"
+    "bat:bat"
+    "rg:ripgrep"
+    "numlockx:numlockx"
+)
 MISSING=()
 
-for dep in "${DEPS[@]}"; do
-    if command -v "$dep" &>/dev/null; then
-        ok "$dep"
+for entry in "${DEPS[@]}"; do
+    cmd="${entry%%:*}"
+    pkg="${entry##*:}"
+    if command -v "$cmd" &>/dev/null; then
+        ok "$pkg"
     else
-        warn "$dep  →  no encontrado"
-        MISSING+=("$dep")
+        warn "$pkg  →  no encontrado"
+        MISSING+=("$pkg")
     fi
 done
 
@@ -67,16 +80,13 @@ fi
 # ─────────────────────────────────────────
 header "── Comprobando fuente JetBrains Nerd Font ────────"
 
-if fc-list | grep -qi "JetBrains"; then
+if pacman -Q ttf-jetbrains-mono-nerd &>/dev/null; then
     ok "JetBrainsMono Nerd Font  →  encontrada"
 else
     warn "JetBrainsMono Nerd Font  →  no instalada"
     echo
     echo -e "  Instálala con pacman:"
     echo -e "      ${BOLD}sudo pacman -S ttf-jetbrains-mono-nerd${RESET}"
-    echo
-    echo -e "  O descárgala desde: https://www.nerdfonts.com/font-downloads"
-    echo -e "  y copia los .ttf a ~/.local/share/fonts/ && fc-cache -fv"
     ERRORS=1
 fi
 

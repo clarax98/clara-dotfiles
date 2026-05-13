@@ -31,6 +31,8 @@ $directory$git_branch$git_status$python$nodejs$rust$golang$java\
 $cmd_duration
 $character"""
 
+right_format = "$battery$time"
+
 # ─────────────────────────────────────────
 #  Directorio
 # ─────────────────────────────────────────
@@ -108,3 +110,35 @@ show_milliseconds = false
 success_symbol = "[❯](bold fg:green)"
 error_symbol = "[❯](bold fg:red)"
 vimcmd_symbol = "[❮](bold fg:mauve)"
+
+# ─────────────────────────────────────────
+#  Batería (solo si ≤ 80%)
+# ─────────────────────────────────────────
+[battery]
+full_symbol     = "󰁹"
+charging_symbol = "󰂄"
+discharging_symbol = "󰂃"
+unknown_symbol  = "󰂑"
+empty_symbol    = "󰂎"
+format = "[$symbol$percentage ]($style)"
+
+[[battery.display]]
+threshold = 20
+style = "bold fg:red"
+
+[[battery.display]]
+threshold = 50
+style = "bold fg:peach"
+
+[[battery.display]]
+threshold = 80
+style = "bold fg:yellow"
+
+# ─────────────────────────────────────────
+#  Hora
+# ─────────────────────────────────────────
+[time]
+disabled = false
+format = "[ 󰥔 $time ]($style)"
+style = "bold fg:overlay2"
+time_format = "%H:%M"

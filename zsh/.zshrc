@@ -6,15 +6,9 @@ export ZSH="$HOME/.oh-my-zsh"
 # Sin tema propio — Starship se encarga del prompt
 ZSH_THEME=""
 
-plugins=(git)
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
-
-# ─────────────────────────────────────────
-#  Plugins (instalados via pacman)
-# ─────────────────────────────────────────
-source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # ─────────────────────────────────────────
 #  Historial

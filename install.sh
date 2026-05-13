@@ -36,6 +36,7 @@ DEPS=(
     "bat:bat"
     "rg:ripgrep"
     "numlockx:numlockx"
+    "fastfetch:fastfetch"
 )
 MISSING=()
 
@@ -171,23 +172,25 @@ backup_file() {
 backup_file "$HOME/.config/ghostty/config"
 backup_file "$HOME/.zshrc"
 backup_file "$HOME/.config/starship.toml"
+backup_file "$HOME/.config/fastfetch/config.jsonc"
 
 # ─────────────────────────────────────────
-#  7. Instalar configuraciones
+#  7. Instalar configuraciones (symlinks)
 # ─────────────────────────────────────────
-header "── Copiando archivos de configuración ───────────"
+header "── Enlazando archivos de configuración ──────────"
 
-install_file() {
+link_config() {
     local src="$1"
     local dest="$2"
     mkdir -p "$(dirname "$dest")"
-    cp "$src" "$dest"
+    ln -sf "$src" "$dest"
     ok "$(basename "$src")  →  $dest"
 }
 
-install_file "$DOTFILES_DIR/ghostty/config"      "$HOME/.config/ghostty/config"
-install_file "$DOTFILES_DIR/zsh/.zshrc"          "$HOME/.zshrc"
-install_file "$DOTFILES_DIR/starship/starship.toml" "$HOME/.config/starship.toml"
+link_config "$DOTFILES_DIR/ghostty/config"               "$HOME/.config/ghostty/config"
+link_config "$DOTFILES_DIR/zsh/.zshrc"                   "$HOME/.zshrc"
+link_config "$DOTFILES_DIR/starship/starship.toml"       "$HOME/.config/starship.toml"
+link_config "$DOTFILES_DIR/fastfetch/config.jsonc"       "$HOME/.config/fastfetch/config.jsonc"
 
 # ─────────────────────────────────────────
 #  8. Terminal por defecto en KDE (Ghostty)

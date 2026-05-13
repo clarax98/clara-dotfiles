@@ -1,7 +1,7 @@
 # clara-dotfiles
 
 Dotfiles personales para CachyOS / Arch Linux con KDE Plasma.  
-Shell: **zsh** + **Oh My Zsh** · Prompt: **Starship** · Terminal: **Ghostty** · Tema: **Catppuccin Mocha**
+Shell: **zsh** + **Oh My Zsh** · Prompt: **Starship** · Terminal: **Ghostty** · Tema terminal: **TokyoNight** · Tema prompt: **Catppuccin Mocha**
 
 ---
 
@@ -10,7 +10,8 @@ Shell: **zsh** + **Oh My Zsh** · Prompt: **Starship** · Terminal: **Ghostty** 
 Instala todo de una vez:
 
 ```bash
-sudo pacman -S ghostty zsh starship eza zoxide fzf atuin bat ripgrep ttf-jetbrains-mono-nerd
+sudo pacman -S ghostty zsh starship eza zoxide fzf atuin bat ripgrep numlockx \
+               zsh-autosuggestions zsh-syntax-highlighting ttf-jetbrains-mono-nerd
 ```
 
 Luego instala **Oh My Zsh** (si aún no lo tienes):
@@ -30,6 +31,9 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 | `atuin` | Historial de comandos sincronizado y con contexto |
 | `bat` | `cat` con resaltado de sintaxis |
 | `ripgrep` | `grep` ultrarrápido |
+| `numlockx` | Activa el teclado numérico al iniciar la sesión |
+| `zsh-autosuggestions` | Sugerencias de comandos en tiempo real |
+| `zsh-syntax-highlighting` | Resaltado de sintaxis en la línea de comandos |
 | `ttf-jetbrains-mono-nerd` | Fuente requerida por Ghostty y Starship |
 
 > **atuin** también se puede instalar vía cargo si prefieres la última versión:
@@ -50,7 +54,7 @@ El script, en orden:
 
 1. Verifica todas las dependencias (pacman, atuin, fuente JetBrains).
 2. Comprueba que `~/.oh-my-zsh` existe.
-3. Clona `zsh-autosuggestions` y `zsh-syntax-highlighting` si no están.
+3. Verifica que `zsh-autosuggestions` y `zsh-syntax-highlighting` están instalados via pacman y crea symlinks en `~/.oh-my-zsh/custom/plugins/`.
 4. Hace backup de tus configs actuales añadiendo `.bak`.
 5. Copia cada archivo a su ubicación definitiva.
 6. Registra Ghostty como terminal por defecto en KDE con `kwriteconfig6`.
@@ -78,18 +82,21 @@ clara-dotfiles/
 
 Configuración de Ghostty con:
 - **Shell**: zsh con integración nativa.
-- **Fuente**: JetBrainsMono Nerd Font Mono 13px.
-- **Tema**: Catppuccin Mocha (oscuro) / Catppuccin Latte (claro), auto según el sistema.
-- Padding 14px, cursor bloque sin parpadeo, copia automática al portapapeles al seleccionar.
+- **Fuente**: JetBrainsMono Nerd Font 12px.
+- **Tema**: TokyoNight.
+- Opacidad 0.92, sin barra de título GTK, cursor barra vertical.
+- Copia automática al portapapeles al seleccionar texto.
+- El ratón se oculta mientras se escribe.
 
 ### `zsh/.zshrc`
 
 Configuración de zsh con Oh My Zsh:
-- **Plugins**: `git`, `zsh-autosuggestions`, `zsh-syntax-highlighting`.
+- **Plugins**: `git`, `zsh-autosuggestions`, `zsh-syntax-highlighting` (cargados via symlinks a los paquetes de pacman).
 - **Historial**: 10 000 entradas, sin duplicados, compartido entre sesiones.
 - **Aliases**: `ls`/`ll`/`la`/`lt` con eza, `cat` con bat, `grep` con ripgrep, `cd` con zoxide.
-- Inicialización de Starship, zoxide y Atuin.
-- Editor por defecto: `nvim`.
+- Inicialización de Starship, zoxide, Atuin y fzf.
+- Editor por defecto: `nano`.
+- `numlockx on` para activar el teclado numérico al inicio.
 
 ### `starship/starship.toml`
 

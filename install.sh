@@ -25,7 +25,7 @@ ERRORS=0
 # ─────────────────────────────────────────
 header "── Comprobando dependencias ──────────────────────"
 
-DEPS=(ghostty zsh starship eza zoxide fzf bat ripgrep)
+DEPS=(ghostty zsh starship eza zoxide fzf bat ripgrep numlockx)
 MISSING=()
 
 for dep in "${DEPS[@]}"; do
@@ -103,30 +103,44 @@ if [[ $ERRORS -ne 0 ]]; then
 fi
 
 # ─────────────────────────────────────────
-#  5. Plugins de Oh My Zsh
+#  5. Plugins de Oh My Zsh (via pacman + symlink)
 # ─────────────────────────────────────────
 header "── Plugins de Oh My Zsh ──────────────────────────"
 
 OMZ_PLUGINS="$HOME/.oh-my-zsh/custom/plugins"
+ZSH_PLUGIN_PKGS=(zsh-autosuggestions zsh-syntax-highlighting)
+MISSING_PLUGINS=()
 
-clone_plugin() {
-    local name="$1"
-    local url="$2"
-    local dest="$OMZ_PLUGINS/$name"
-    if [[ -d "$dest" ]]; then
-        ok "$name  →  ya existe"
+for pkg in "${ZSH_PLUGIN_PKGS[@]}"; do
+    if pacman -Q "$pkg" &>/dev/null; then
+        ok "$pkg  →  instalado"
     else
-        info "Clonando $name..."
-        git clone --depth=1 "$url" "$dest"
-        ok "$name  →  clonado"
+        warn "$pkg  →  no instalado"
+        MISSING_PLUGINS+=("$pkg")
+    fi
+done
+
+if [[ ${#MISSING_PLUGINS[@]} -gt 0 ]]; then
+    echo
+    error "Faltan plugins zsh. Instálalos con:"
+    echo -e "    ${BOLD}sudo pacman -S ${MISSING_PLUGINS[*]}${RESET}"
+    exit 1
+fi
+
+link_plugin() {
+    local name="$1"
+    local src="/usr/share/zsh/plugins/$name"
+    local dest="$OMZ_PLUGINS/$name"
+    if [[ -L "$dest" ]]; then
+        ok "$name  →  symlink ya existe"
+    else
+        ln -sf "$src" "$dest"
+        ok "$name  →  symlink creado"
     fi
 }
 
-clone_plugin "zsh-autosuggestions" \
-    "https://github.com/zsh-users/zsh-autosuggestions"
-
-clone_plugin "zsh-syntax-highlighting" \
-    "https://github.com/zsh-users/zsh-syntax-highlighting"
+link_plugin "zsh-autosuggestions"
+link_plugin "zsh-syntax-highlighting"
 
 # ─────────────────────────────────────────
 #  6. Backup de configs existentes

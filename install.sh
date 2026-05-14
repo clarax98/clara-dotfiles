@@ -20,6 +20,13 @@ header() { echo -e "\n${BOLD}$*${RESET}"; }
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # ─────────────────────────────────────────
+#  0. Sincronizar mirrors y actualizar
+# ─────────────────────────────────────────
+header "── Actualizando sistema ─────────────────────────"
+sudo pacman -Syu --noconfirm
+ok "Sistema actualizado"
+
+# ─────────────────────────────────────────
 #  1. Paquetes pacman
 # ─────────────────────────────────────────
 header "── Instalando paquetes ───────────────────────────"

@@ -90,7 +90,10 @@ if [[ -d "$CURSORS_DIR/Sweet-cursors" ]]; then
     ok "Sweet-cursors  →  ya instalado"
 else
     info "Clonando Sweet-cursors..."
-    git clone --depth=1 https://github.com/EliverLara/Sweet-cursors.git "$CURSORS_DIR/Sweet-cursors"
+    SWEET_TMP=$(mktemp -d)
+    git clone --depth=1 https://github.com/Gigas002/Sweet.git "$SWEET_TMP"
+    cp -r "$SWEET_TMP/Sweet-cursors" "$CURSORS_DIR/Sweet-cursors"
+    rm -rf "$SWEET_TMP"
     ok "Sweet-cursors instalado"
 fi
 

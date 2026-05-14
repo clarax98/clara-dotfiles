@@ -153,29 +153,15 @@ else
 fi
 
 # ─────────────────────────────────────────
-#  7. Kvantum: Slot Dark theme
+#  7. Widget style: Breeze
 # ─────────────────────────────────────────
-header "── Kvantum: Slot Dark ───────────────────────────"
-
-KVANTUM_DEST="$HOME/.config/Kvantum"
-mkdir -p "$KVANTUM_DEST"
-
-if [[ -d "$KVANTUM_DEST/Slot-Dark-Kvantum" ]]; then
-    ok "Slot-Dark-Kvantum  →  ya instalado"
-else
-    cp -r "$DOTFILES_DIR/kvantum/Slot-Dark-Kvantum" "$KVANTUM_DEST/"
-    ok "Slot-Dark-Kvantum  →  instalado"
-fi
-
-if [[ -f "$KVANTUM_DEST/kvantum.kvconfig" && ! -L "$KVANTUM_DEST/kvantum.kvconfig" ]]; then
-    mv "$KVANTUM_DEST/kvantum.kvconfig" "$KVANTUM_DEST/kvantum.kvconfig.bak"
-fi
-ln -sf "$DOTFILES_DIR/kvantum/kvantum.kvconfig" "$KVANTUM_DEST/kvantum.kvconfig"
-ok "kvantum.kvconfig  →  Slot-Dark-Kvantum activo"
+header "── Widget style: Breeze ─────────────────────────"
 
 if command -v kwriteconfig6 &>/dev/null; then
-    kwriteconfig6 --file kdeglobals --group KDE --key widgetStyle kvantum
-    ok "Widget style  →  kvantum"
+    kwriteconfig6 --file kdeglobals --group KDE --key widgetStyle Breeze
+    ok "Widget style  →  Breeze"
+else
+    warn "kwriteconfig6 no encontrado — configura el widget style manualmente en Ajustes del sistema"
 fi
 
 # ─────────────────────────────────────────

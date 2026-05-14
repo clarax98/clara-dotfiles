@@ -28,7 +28,7 @@ El script instala dependencias, clona temas, configura KDE y enlaza todo con sym
 | 4 | Crea symlinks de plugins zsh desde pacman |
 | 5 | Cambia el shell de login a **zsh** con `chsh` |
 | 6 | Descarga **Microsoft Edit** (editor de terminal) desde GitHub releases |
-| 7 | Instala el tema **Slot Dark Kvantum** y lo activa en KDE |
+| 7 | Activa el widget style **Breeze** en KDE |
 | 8 | Configura variables de entorno Wayland |
 | 9 | Backup `.bak` de configs existentes |
 | 10 | Enlaza todas las configs con **symlinks** (editar el repo = cambio inmediato) |
@@ -60,9 +60,6 @@ clara-dotfiles/
 │   ├── clara-white.{png,ico}   —  fondo oscuro + trazos blancos
 │   ├── clara-gradient.{png,ico}—  fondo degradado + trazos mauve
 │   └── clara-glow.{png,ico}    —  fondo oscuro + efecto neón
-├── kvantum/
-│   ├── kvantum.kvconfig        →  ~/.config/Kvantum/kvantum.kvconfig
-│   └── Slot-Dark-Kvantum/      →  ~/.config/Kvantum/Slot-Dark-Kvantum/
 ├── nano/
 │   └── .nanorc                 →  ~/.nanorc
 ├── starship/
@@ -102,7 +99,7 @@ clara-dotfiles/
 | Herramienta | Función |
 |-------------|---------|
 | KDE Plasma 6 + KWin Wayland | Entorno de escritorio |
-| [Kvantum](https://github.com/tsujan/Kvantum) + Slot Dark | Estilo Qt para apps KDE |
+| Breeze | Estilo Qt/KDE nativo |
 | Andromeda Launcher | Launcher — tecla Super (widget Plasma, preinstalado en CachyOS) |
 | xremap | Remapeo de teclas (botón Copilot → XF86Assistant) |
 | candy-icons | Tema de iconos |

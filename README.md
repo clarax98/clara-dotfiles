@@ -1,7 +1,14 @@
-# clara-dotfiles
+<p align="center">
+  <img src="icon/clara-glow.png" width="120" alt="Clara logo" />
+</p>
 
-Dotfiles personales para CachyOS / Arch Linux con KDE Plasma 6.  
-Shell: **zsh** · Prompt: **Starship** (Catppuccin Mocha) · Terminal: **Ghostty** (Catppuccin Mocha) · Editor: **Microsoft Edit**
+<h1 align="center">clara-dotfiles</h1>
+<p align="center">By Clara</p>
+
+<p align="center">
+  Dotfiles personales para CachyOS / Arch Linux con KDE Plasma 6.<br/>
+  Shell: <strong>zsh</strong> · Prompt: <strong>Starship</strong> (Catppuccin Mocha) · Terminal: <strong>Ghostty</strong> (Catppuccin Mocha) · Editor: <strong>Microsoft Edit</strong>
+</p>
 
 ---
 
@@ -59,7 +66,7 @@ clara-dotfiles/
 │   ├── clara-mauve.{png,ico}   —  fondo oscuro + trazos mauve
 │   ├── clara-white.{png,ico}   —  fondo oscuro + trazos blancos
 │   ├── clara-gradient.{png,ico}—  fondo degradado + trazos mauve
-│   └── clara-glow.{png,ico}    —  fondo oscuro + efecto neón
+│   └── clara-glow.{png,ico}    —  fondo oscuro + efecto neón  ← por defecto
 ├── nano/
 │   └── .nanorc                 →  ~/.nanorc
 ├── starship/

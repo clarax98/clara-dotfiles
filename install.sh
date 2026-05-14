@@ -23,8 +23,18 @@ DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 #  0. Sincronizar mirrors y actualizar
 # ─────────────────────────────────────────
 header "── Actualizando sistema ─────────────────────────"
+
+info "Sincronizando repos oficiales..."
 sudo pacman -Syu --noconfirm
-ok "Sistema actualizado"
+ok "pacman  →  actualizado"
+
+if command -v paru &>/dev/null; then
+    info "Actualizando paquetes AUR..."
+    paru -Sua --noconfirm
+    ok "paru (AUR)  →  actualizado"
+else
+    warn "paru no encontrado — AUR no actualizado"
+fi
 
 # ─────────────────────────────────────────
 #  1. Paquetes pacman

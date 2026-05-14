@@ -1,145 +1,152 @@
 # clara-dotfiles
 
-Dotfiles personales para CachyOS / Arch Linux con KDE Plasma.  
-Shell: **zsh** + **Oh My Zsh** · Prompt: **Starship** · Terminal: **Ghostty** · Tema terminal: **TokyoNight** · Tema prompt: **Catppuccin Mocha**
+Dotfiles personales para CachyOS / Arch Linux con KDE Plasma 6.  
+Shell: **zsh** · Prompt: **Starship** (Catppuccin Mocha) · Terminal: **Ghostty** (Catppuccin Mocha) · Editor: **Microsoft Edit**
 
 ---
 
-## Dependencias
-
-Instala todo de una vez:
+## Instalación rápida
 
 ```bash
-sudo pacman -S ghostty zsh starship eza zoxide fzf atuin bat ripgrep numlockx \
-               zsh-autosuggestions zsh-syntax-highlighting ttf-jetbrains-mono-nerd
-```
-
-Luego instala **Oh My Zsh** (si aún no lo tienes):
-
-```bash
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-```
-
-| Paquete | Para qué sirve |
-|---------|----------------|
-| `ghostty` | Emulador de terminal |
-| `zsh` | Shell principal |
-| `starship` | Prompt cross-shell con info de git y lenguajes |
-| `eza` | `ls` con iconos Nerd Font y soporte git |
-| `zoxide` | `cd` inteligente con historial de directorios |
-| `fzf` | Búsqueda fuzzy interactiva |
-| `atuin` | Historial de comandos sincronizado y con contexto |
-| `bat` | `cat` con resaltado de sintaxis |
-| `ripgrep` | `grep` ultrarrápido |
-| `numlockx` | Activa el teclado numérico al iniciar la sesión |
-| `zsh-autosuggestions` | Sugerencias de comandos en tiempo real |
-| `zsh-syntax-highlighting` | Resaltado de sintaxis en la línea de comandos |
-| `ttf-jetbrains-mono-nerd` | Fuente requerida por Ghostty y Starship |
-
-> **atuin** también se puede instalar vía cargo si prefieres la última versión:
-> `cargo install atuin`
-
----
-
-## Instalación
-
-```bash
-git clone https://github.com/tu-usuario/clara-dotfiles.git ~/clara-dotfiles
+git clone https://github.com/claraogalla/clara-dotfiles.git ~/clara-dotfiles
 cd ~/clara-dotfiles
 chmod +x install.sh
 ./install.sh
 ```
 
-El script, en orden:
-
-1. Verifica todas las dependencias (pacman, atuin, fuente JetBrains).
-2. Comprueba que `~/.oh-my-zsh` existe.
-3. Verifica que `zsh-autosuggestions` y `zsh-syntax-highlighting` están instalados via pacman y crea symlinks en `~/.oh-my-zsh/custom/plugins/`.
-4. Hace backup de tus configs actuales añadiendo `.bak`.
-5. Copia cada archivo a su ubicación definitiva.
-6. Registra Ghostty como terminal por defecto en KDE con `kwriteconfig6`.
+El script instala dependencias, clona temas, configura KDE y enlaza todo con symlinks. No se necesita nada previo.
 
 ---
 
-## Estructura
+## Qué hace `install.sh`
+
+| Paso | Qué hace |
+|------|----------|
+| 1 | Instala paquetes pacman que falten (`ghostty`, `zsh`, `starship`, `bat`, `atuin`…) |
+| 2 | Descarga **candy-icons** y **Sweet-cursors** desde GitHub si no están |
+| 3 | Instala **Oh My Zsh** automáticamente si no existe |
+| 4 | Crea symlinks de plugins zsh desde pacman |
+| 5 | Cambia el shell de login a **zsh** con `chsh` |
+| 6 | Descarga **Microsoft Edit** (editor de terminal) desde GitHub releases |
+| 7 | Instala el tema **Slot Dark Kvantum** y lo activa en KDE |
+| 8 | Configura variables de entorno Wayland |
+| 9 | Backup `.bak` de configs existentes |
+| 10 | Enlaza todas las configs con **symlinks** (editar el repo = cambio inmediato) |
+| 11 | Registra Ghostty como terminal por defecto en KDE |
+| 12 | Muestra instrucciones para asignar **Super** a Andromeda Launcher (widget Plasma) |
+
+---
+
+## Estructura del repo
 
 ```
 clara-dotfiles/
+├── atuin/
+│   └── config.toml             →  ~/.config/atuin/config.toml
+├── bat/
+│   └── config                  →  ~/.config/bat/config
+├── fastfetch/
+│   └── config.jsonc            →  ~/.config/fastfetch/config.jsonc
 ├── ghostty/
-│   └── config              →  ~/.config/ghostty/config
-├── zsh/
-│   └── .zshrc              →  ~/.zshrc
+│   └── config                  →  ~/.config/ghostty/config
+├── git/
+│   ├── .gitconfig              →  ~/.gitconfig
+│   └── .gitignore_global       →  ~/.gitignore_global
+├── gtk/
+│   ├── gtk-3.0/settings.ini   →  ~/.config/gtk-3.0/settings.ini
+│   └── gtk-4.0/settings.ini   →  ~/.config/gtk-4.0/settings.ini
+├── icon/
+│   ├── clara-mauve.{png,ico}   —  fondo oscuro + trazos mauve
+│   ├── clara-white.{png,ico}   —  fondo oscuro + trazos blancos
+│   ├── clara-gradient.{png,ico}—  fondo degradado + trazos mauve
+│   └── clara-glow.{png,ico}    —  fondo oscuro + efecto neón
+├── kvantum/
+│   ├── kvantum.kvconfig        →  ~/.config/Kvantum/kvantum.kvconfig
+│   └── Slot-Dark-Kvantum/      →  ~/.config/Kvantum/Slot-Dark-Kvantum/
+├── nano/
+│   └── .nanorc                 →  ~/.nanorc
 ├── starship/
-│   └── starship.toml       →  ~/.config/starship.toml
+│   └── starship.toml           →  ~/.config/starship.toml
+├── wayland/
+│   └── wayland.conf            →  ~/.config/environment.d/wayland.conf
+├── xremap/
+│   └── config.yml              →  ~/.config/xremap/config.yml
+├── zsh/
+│   └── .zshrc                  →  ~/.zshrc
+├── packages.txt                —  lista de referencia de paquetes
 └── install.sh
 ```
 
 ---
 
-## Archivos de configuración
+## Stack
 
-### `ghostty/config`
+### Terminal y shell
 
-Configuración de Ghostty con:
-- **Shell**: zsh con integración nativa.
-- **Fuente**: JetBrainsMono Nerd Font 12px.
-- **Tema**: TokyoNight.
-- Opacidad 0.92, sin barra de título GTK, cursor barra vertical.
-- Copia automática al portapapeles al seleccionar texto.
-- El ratón se oculta mientras se escribe.
+| Herramienta | Función |
+|-------------|---------|
+| [Ghostty](https://ghostty.org) | Terminal — rápido, nativo Wayland, splits sin tmux |
+| zsh | Shell principal sin Oh My Zsh (plugins directos desde pacman) |
+| [Starship](https://starship.rs) | Prompt — Catppuccin Mocha, batería, hora, lenguajes |
+| [Atuin](https://atuin.sh) | Historial avanzado — búsqueda fuzzy, contexto por host |
+| [zoxide](https://github.com/ajeetdsouza/zoxide) | `cd` inteligente con historial |
+| [fzf](https://github.com/junegunn/fzf) | Búsqueda fuzzy interactiva |
+| [eza](https://github.com/eza-community/eza) | `ls` con iconos Nerd Font y git status |
+| [bat](https://github.com/sharkdp/bat) | `cat` con syntax highlighting |
+| [ripgrep](https://github.com/BurntSushi/ripgrep) | `grep` ultrarrápido |
+| [fastfetch](https://github.com/fastfetch-cli/fastfetch) | Info del sistema al abrir terminal |
+| [Microsoft Edit](https://github.com/microsoft/edit) | Editor de terminal moderno (descargado desde releases) |
 
-### `zsh/.zshrc`
+### KDE / Wayland
 
-Configuración de zsh con Oh My Zsh:
-- **Plugins**: `git`, `zsh-autosuggestions`, `zsh-syntax-highlighting` (cargados via symlinks a los paquetes de pacman).
-- **Historial**: 10 000 entradas, sin duplicados, compartido entre sesiones.
-- **Aliases**: `ls`/`ll`/`la`/`lt` con eza, `cat` con bat, `grep` con ripgrep, `cd` con zoxide.
-- Inicialización de Starship, zoxide, Atuin y fzf.
-- Editor por defecto: `nano`.
-- `numlockx on` para activar el teclado numérico al inicio.
+| Herramienta | Función |
+|-------------|---------|
+| KDE Plasma 6 + KWin Wayland | Entorno de escritorio |
+| [Kvantum](https://github.com/tsujan/Kvantum) + Slot Dark | Estilo Qt para apps KDE |
+| Andromeda Launcher | Launcher — tecla Super (widget Plasma, preinstalado en CachyOS) |
+| xremap | Remapeo de teclas (botón Copilot → XF86Assistant) |
+| candy-icons | Tema de iconos |
+| Sweet-cursors | Tema de cursores |
+| JetBrainsMono Nerd Font | Fuente para terminal y Starship |
 
-### `starship/starship.toml`
+---
 
-Prompt de dos líneas con paleta Catppuccin Mocha:
-- Línea 1: directorio · rama git · estado git · versión de lenguaje activo · duración del comando (si > 2 s).
-- Línea 2: `❯` verde (éxito) o rojo (error).
-- Lenguajes detectados: Python, Node.js, Rust, Go, Java.
+## Aliases
+
+| Alias | Comando real |
+|-------|-------------|
+| `ls` | `eza --icons` |
+| `ll` | `eza -la --icons --git` |
+| `la` | `eza -a --icons` |
+| `lt` | `eza --tree --icons` |
+| `cat` | `bat` |
+| `grep` | `rg` |
+| `cd` | `z` (zoxide) |
+| `e` / `nano` / `vi` | `edit` (Microsoft Edit) |
+
+---
+
+## Icono (Clara Corp)
+
+Logo personal — mezcla creativa de cebolla y gato. Variantes en `icon/`:
+
+| Variante | Descripción |
+|----------|-------------|
+| `clara-glow` | Efecto neón con halo mauve — **por defecto** |
+| `clara-mauve` | Trazos mauve (#cba6f7) sobre fondo #1e1e2e |
+| `clara-white` | Trazos blancos sobre fondo oscuro — máximo contraste |
+| `clara-gradient` | Fondo degradado crust→surface0 con trazos mauve |
 
 ---
 
 ## Atajos de Ghostty
 
-Ghostty no necesita tmux — gestiona splits y tabs de forma nativa.
-
-### Tabs
-
 | Atajo | Acción |
 |-------|--------|
 | `Ctrl+Shift+T` | Nueva tab |
-| `Ctrl+Shift+W` | Cerrar tab / split activo |
-| `Ctrl+Tab` | Siguiente tab |
-| `Ctrl+Shift+Tab` | Tab anterior |
-| `Ctrl+Shift+1…9` | Ir a tab N |
-
-### Splits (paneles)
-
-| Atajo | Acción |
-|-------|--------|
-| `Ctrl+Shift+O` | Nuevo split (horizontal) |
-| `Ctrl+Shift+E` | Nuevo split (vertical) |
+| `Ctrl+Shift+O` | Split horizontal |
+| `Ctrl+Shift+E` | Split vertical |
 | `Alt+←↑↓→` | Navegar entre splits |
-| `Ctrl+Shift+Enter` | Maximizar / restaurar split activo |
-| `Ctrl+Shift+W` | Cerrar split activo |
-
-### General
-
-| Atajo | Acción |
-|-------|--------|
-| `Ctrl+Shift+F` | Buscar en el buffer |
-| `Ctrl+Shift++` / `Ctrl+Shift+-` | Aumentar / reducir fuente |
-| `Ctrl+Shift+0` | Restablecer tamaño de fuente |
-| `Ctrl+Shift+C` / `Ctrl+Shift+V` | Copiar / pegar |
-| `Ctrl+Shift+,` | Recargar configuración |
-
-> Lista completa: `ghostty +list-keybindings`  
-> Los atajos son personalizables en `~/.config/ghostty/config` con la directiva `keybind`.
+| `Ctrl+Shift+W` | Cerrar tab/split |
+| `Ctrl+Shift+F` | Buscar en buffer |
+| `Ctrl+Shift+,` | Recargar config |

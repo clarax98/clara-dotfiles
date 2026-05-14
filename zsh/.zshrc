@@ -1,16 +1,15 @@
 fastfetch
 
 # ─────────────────────────────────────────
-#  Oh My Zsh
+#  Autocompletado
 # ─────────────────────────────────────────
-export ZSH="$HOME/.oh-my-zsh"
+autoload -U compinit && compinit
 
-# Sin tema propio — Starship se encarga del prompt
-ZSH_THEME=""
-
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
-
-source $ZSH/oh-my-zsh.sh
+# ─────────────────────────────────────────
+#  Plugins
+# ─────────────────────────────────────────
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # ─────────────────────────────────────────
 #  Historial
@@ -46,6 +45,11 @@ source /usr/share/fzf/completion.zsh
 # ─────────────────────────────────────────
 #  Aliases
 # ─────────────────────────────────────────
+alias e="edit"
+alias nano="edit"
+alias micro="edit"
+alias vi="edit"
+
 alias ls="eza --icons"
 alias ll="eza -la --icons --git"
 alias la="eza -a --icons"
@@ -59,8 +63,8 @@ alias ...="cd ../.."
 # ─────────────────────────────────────────
 #  Editor
 # ─────────────────────────────────────────
-export EDITOR="nano"
-export VISUAL="nano"
+export EDITOR="edit"
+export VISUAL="edit"
 export PATH="$HOME/.local/bin:$PATH"
 
 numlockx on

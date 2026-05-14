@@ -1,0 +1,5 @@
+keymap:
+  - name: Copilot button
+    remap:
+      Super-Shift-F23:
+        launch: ["xdotool", "key", "XF86Assistant"]

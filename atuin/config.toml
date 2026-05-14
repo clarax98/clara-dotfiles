@@ -1,0 +1,11 @@
+dialect = "uk"
+search_mode = "fuzzy"
+filter_mode = "host"
+style = "compact"
+show_preview = true
+exit_mode = "return-query"
+history_format = "{time}\t{duration}\t{command}"
+enter_accept = true
+
+[sync]
+records = true

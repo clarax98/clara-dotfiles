@@ -1,0 +1,32 @@
+# ── Editores ─────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# ── Entornos Python ───────────────────────
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# ── Node ──────────────────────────────────
+node_modules/
+.npm/
+
+# ── Rust ──────────────────────────────────
+target/
+
+# ── Logs y temporales ─────────────────────
+*.log
+*.tmp
+*.bak
+.env
+.env.local
+.env.*.local
+
+# ── Claude Code ───────────────────────────
+.claude/settings.local.json

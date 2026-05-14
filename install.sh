@@ -18,143 +18,175 @@ error()  { echo -e "${RED}  ✗${RESET} $*"; }
 header() { echo -e "\n${BOLD}$*${RESET}"; }
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ERRORS=0
 
 # ─────────────────────────────────────────
-#  1. Dependencias (pacman)
+#  1. Paquetes pacman
 # ─────────────────────────────────────────
-header "── Comprobando dependencias ──────────────────────"
+header "── Instalando paquetes ───────────────────────────"
 
-# formato: "comando:paquete"
-DEPS=(
-    "ghostty:ghostty"
-    "zsh:zsh"
-    "starship:starship"
-    "eza:eza"
-    "zoxide:zoxide"
-    "fzf:fzf"
-    "bat:bat"
-    "rg:ripgrep"
-    "numlockx:numlockx"
-    "fastfetch:fastfetch"
+PKGS=(
+    # terminal y shell
+    ghostty
+    zsh
+    zsh-autosuggestions
+    zsh-syntax-highlighting
+    atuin
+    # prompt y CLI
+    starship
+    eza
+    zoxide
+    fzf
+    bat
+    ripgrep
+    fastfetch
+    # utilidades
+    numlockx
+    git
+    curl
+    wget
+    htop
+    btop
+    xdotool
+    # fuentes
+    ttf-jetbrains-mono-nerd
+    noto-fonts
+    noto-fonts-emoji
 )
-MISSING=()
 
-for entry in "${DEPS[@]}"; do
-    cmd="${entry%%:*}"
-    pkg="${entry##*:}"
-    if command -v "$cmd" &>/dev/null; then
+MISSING=()
+for pkg in "${PKGS[@]}"; do
+    if pacman -Q "$pkg" &>/dev/null; then
         ok "$pkg"
     else
-        warn "$pkg  →  no encontrado"
+        warn "$pkg  →  pendiente"
         MISSING+=("$pkg")
     fi
 done
 
 if [[ ${#MISSING[@]} -gt 0 ]]; then
-    echo
-    error "Faltan paquetes. Instálalos con:"
-    echo -e "    ${BOLD}sudo pacman -S ${MISSING[*]}${RESET}"
-    ERRORS=1
+    info "Instalando ${#MISSING[@]} paquetes con pacman..."
+    sudo pacman -S --needed --noconfirm "${MISSING[@]}"
+    ok "Paquetes instalados"
 fi
 
 # ─────────────────────────────────────────
-#  2. Atuin (puede venir de pacman o cargo)
+#  2. Temas de iconos y cursores
 # ─────────────────────────────────────────
-header "── Comprobando atuin ────────────────────────────"
+header "── Temas: candy-icons y Sweet-cursors ───────────"
 
-if command -v atuin &>/dev/null; then
-    ok "atuin"
+ICONS_DIR="$HOME/.local/share/icons"
+CURSORS_DIR="$HOME/.icons"
+mkdir -p "$ICONS_DIR" "$CURSORS_DIR"
+
+if [[ -d "$ICONS_DIR/candy-icons" ]]; then
+    ok "candy-icons  →  ya instalado"
 else
-    warn "atuin  →  no encontrado"
-    echo
-    echo -e "  Instala atuin con ${BOLD}pacman${RESET} (recomendado en CachyOS):"
-    echo -e "      ${BOLD}sudo pacman -S atuin${RESET}"
-    echo
-    echo -e "  O bien con ${BOLD}cargo${RESET} si prefieres la última versión:"
-    echo -e "      ${BOLD}cargo install atuin${RESET}"
-    ERRORS=1
+    info "Clonando candy-icons..."
+    git clone --depth=1 https://github.com/EliverLara/candy-icons.git "$ICONS_DIR/candy-icons"
+    ok "candy-icons instalado"
 fi
 
-# ─────────────────────────────────────────
-#  3. Fuente JetBrains Nerd Font
-# ─────────────────────────────────────────
-header "── Comprobando fuente JetBrains Nerd Font ────────"
-
-if pacman -Q ttf-jetbrains-mono-nerd &>/dev/null; then
-    ok "JetBrainsMono Nerd Font  →  encontrada"
+if [[ -d "$CURSORS_DIR/Sweet-cursors" ]]; then
+    ok "Sweet-cursors  →  ya instalado"
 else
-    warn "JetBrainsMono Nerd Font  →  no instalada"
-    echo
-    echo -e "  Instálala con pacman:"
-    echo -e "      ${BOLD}sudo pacman -S ttf-jetbrains-mono-nerd${RESET}"
-    ERRORS=1
+    info "Clonando Sweet-cursors..."
+    git clone --depth=1 https://github.com/EliverLara/Sweet-cursors.git "$CURSORS_DIR/Sweet-cursors"
+    ok "Sweet-cursors instalado"
 fi
 
 # ─────────────────────────────────────────
-#  4. Oh My Zsh
+#  3. Microsoft Edit
 # ─────────────────────────────────────────
-header "── Comprobando Oh My Zsh ────────────────────────"
+header "── Editor: Microsoft Edit ───────────────────────"
 
-if [[ -d "$HOME/.oh-my-zsh" ]]; then
-    ok "oh-my-zsh"
+if command -v edit &>/dev/null; then
+    ok "edit  →  $(edit --version 2>/dev/null)"
 else
-    error "~/.oh-my-zsh no existe. Instala Oh My Zsh primero:"
-    echo
-    echo -e '      sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"'
-    echo
-    exit 1
-fi
-
-# Salir si hay dependencias faltantes (excepto OMZ que ya salió arriba)
-if [[ $ERRORS -ne 0 ]]; then
-    echo
-    error "Corrige las dependencias anteriores y vuelve a ejecutar install.sh"
-    exit 1
+    info "Descargando Microsoft Edit..."
+    EDIT_VERSION=$(curl -s https://api.github.com/repos/microsoft/edit/releases/latest | grep '"tag_name"' | cut -d'"' -f4 | tr -d 'v')
+    EDIT_URL="https://github.com/microsoft/edit/releases/download/v${EDIT_VERSION}/edit-${EDIT_VERSION}-x86_64-linux-gnu.tar.gz"
+    mkdir -p "$HOME/.local/bin"
+    curl -sL "$EDIT_URL" | tar -xz -C "$HOME/.local/bin/"
+    chmod +x "$HOME/.local/bin/edit"
+    ok "edit  →  $(edit --version 2>/dev/null)"
 fi
 
 # ─────────────────────────────────────────
-#  5. Plugins de Oh My Zsh (via pacman + symlink)
+#  4. Plugins zsh (sourced directamente desde pacman)
 # ─────────────────────────────────────────
-header "── Plugins de Oh My Zsh ──────────────────────────"
+header "── Plugins zsh ──────────────────────────────────"
 
-OMZ_PLUGINS="$HOME/.oh-my-zsh/custom/plugins"
-ZSH_PLUGIN_PKGS=(zsh-autosuggestions zsh-syntax-highlighting)
-MISSING_PLUGINS=()
-
-for pkg in "${ZSH_PLUGIN_PKGS[@]}"; do
-    if pacman -Q "$pkg" &>/dev/null; then
-        ok "$pkg  →  instalado"
+for plugin in zsh-autosuggestions zsh-syntax-highlighting; do
+    if [[ -f "/usr/share/zsh/plugins/$plugin/$plugin.zsh" ]]; then
+        ok "$plugin  →  disponible"
     else
-        warn "$pkg  →  no instalado"
-        MISSING_PLUGINS+=("$pkg")
+        warn "$plugin  →  /usr/share/zsh/plugins/$plugin/ no encontrado"
     fi
 done
 
-if [[ ${#MISSING_PLUGINS[@]} -gt 0 ]]; then
-    echo
-    error "Faltan plugins zsh. Instálalos con:"
-    echo -e "    ${BOLD}sudo pacman -S ${MISSING_PLUGINS[*]}${RESET}"
-    exit 1
+# ─────────────────────────────────────────
+#  5. Shell de login (zsh)
+# ─────────────────────────────────────────
+header "── Shell de login ───────────────────────────────"
+
+ZSH_PATH="$(command -v zsh)"
+if [[ "$SHELL" == "$ZSH_PATH" ]]; then
+    ok "zsh  →  ya es el shell de login"
+else
+    warn "Shell actual: $SHELL  →  cambiando a zsh"
+    chsh -s "$ZSH_PATH"
+    ok "Shell cambiado a zsh (efectivo en la próxima sesión)"
 fi
 
-link_plugin() {
-    local name="$1"
-    local src="/usr/share/zsh/plugins/$name"
-    local dest="$OMZ_PLUGINS/$name"
-    if [[ -L "$dest" ]]; then
-        ok "$name  →  symlink ya existe"
-    else
-        ln -sf "$src" "$dest"
-        ok "$name  →  symlink creado"
-    fi
-}
+# ─────────────────────────────────────────
+#  6. Configuración de git
+# ─────────────────────────────────────────
+header "── Configuración de git ─────────────────────────"
 
-link_plugin "zsh-autosuggestions"
-link_plugin "zsh-syntax-highlighting"
+GIT_NAME="$(git config --global user.name 2>/dev/null || true)"
+GIT_EMAIL="$(git config --global user.email 2>/dev/null || true)"
+
+if [[ -n "$GIT_NAME" && -n "$GIT_EMAIL" ]]; then
+    ok "git user  →  $GIT_NAME <$GIT_EMAIL>"
+else
+    warn "git user no configurado — se usará el valor del .gitconfig del repo"
+fi
 
 # ─────────────────────────────────────────
-#  6. Backup de configs existentes
+#  7. Kvantum: Slot Dark theme
+# ─────────────────────────────────────────
+header "── Kvantum: Slot Dark ───────────────────────────"
+
+KVANTUM_DEST="$HOME/.config/Kvantum"
+mkdir -p "$KVANTUM_DEST"
+
+if [[ -d "$KVANTUM_DEST/Slot-Dark-Kvantum" ]]; then
+    ok "Slot-Dark-Kvantum  →  ya instalado"
+else
+    cp -r "$DOTFILES_DIR/kvantum/Slot-Dark-Kvantum" "$KVANTUM_DEST/"
+    ok "Slot-Dark-Kvantum  →  instalado"
+fi
+
+if [[ -f "$KVANTUM_DEST/kvantum.kvconfig" && ! -L "$KVANTUM_DEST/kvantum.kvconfig" ]]; then
+    mv "$KVANTUM_DEST/kvantum.kvconfig" "$KVANTUM_DEST/kvantum.kvconfig.bak"
+fi
+ln -sf "$DOTFILES_DIR/kvantum/kvantum.kvconfig" "$KVANTUM_DEST/kvantum.kvconfig"
+ok "kvantum.kvconfig  →  Slot-Dark-Kvantum activo"
+
+if command -v kwriteconfig6 &>/dev/null; then
+    kwriteconfig6 --file kdeglobals --group KDE --key widgetStyle kvantum
+    ok "Widget style  →  kvantum"
+fi
+
+# ─────────────────────────────────────────
+#  8. Variables de entorno Wayland
+# ─────────────────────────────────────────
+header "── Variables de entorno Wayland ─────────────────"
+
+mkdir -p "$HOME/.config/environment.d"
+
+# ─────────────────────────────────────────
+#  8. Backup de configs existentes
 # ─────────────────────────────────────────
 header "── Backup de configuraciones existentes ──────────"
 
@@ -162,10 +194,10 @@ backup_file() {
     local target="$1"
     if [[ -L "$target" ]]; then
         rm "$target"
-        info "Eliminado symlink previo: $target"
+        info "Symlink previo eliminado: $target"
     elif [[ -e "$target" ]]; then
         mv "$target" "${target}.bak"
-        warn "Backup: $target → ${target}.bak"
+        warn "Backup: $(basename "$target") → ${target}.bak"
     fi
 }
 
@@ -173,9 +205,18 @@ backup_file "$HOME/.config/ghostty/config"
 backup_file "$HOME/.zshrc"
 backup_file "$HOME/.config/starship.toml"
 backup_file "$HOME/.config/fastfetch/config.jsonc"
+backup_file "$HOME/.config/bat/config"
+backup_file "$HOME/.config/atuin/config.toml"
+backup_file "$HOME/.config/gtk-3.0/settings.ini"
+backup_file "$HOME/.config/gtk-4.0/settings.ini"
+backup_file "$HOME/.nanorc"
+backup_file "$HOME/.gitconfig"
+backup_file "$HOME/.gitignore_global"
+backup_file "$HOME/.config/environment.d/wayland.conf"
+backup_file "$HOME/.config/xremap/config.yml"
 
 # ─────────────────────────────────────────
-#  7. Instalar configuraciones (symlinks)
+#  9. Instalar configuraciones (symlinks)
 # ─────────────────────────────────────────
 header "── Enlazando archivos de configuración ──────────"
 
@@ -191,9 +232,30 @@ link_config "$DOTFILES_DIR/ghostty/config"               "$HOME/.config/ghostty/
 link_config "$DOTFILES_DIR/zsh/.zshrc"                   "$HOME/.zshrc"
 link_config "$DOTFILES_DIR/starship/starship.toml"       "$HOME/.config/starship.toml"
 link_config "$DOTFILES_DIR/fastfetch/config.jsonc"       "$HOME/.config/fastfetch/config.jsonc"
+link_config "$DOTFILES_DIR/bat/config"                   "$HOME/.config/bat/config"
+link_config "$DOTFILES_DIR/atuin/config.toml"            "$HOME/.config/atuin/config.toml"
+link_config "$DOTFILES_DIR/gtk/gtk-3.0/settings.ini"     "$HOME/.config/gtk-3.0/settings.ini"
+link_config "$DOTFILES_DIR/gtk/gtk-4.0/settings.ini"     "$HOME/.config/gtk-4.0/settings.ini"
+link_config "$DOTFILES_DIR/nano/.nanorc"                 "$HOME/.nanorc"
+link_config "$DOTFILES_DIR/git/.gitconfig"               "$HOME/.gitconfig"
+link_config "$DOTFILES_DIR/git/.gitignore_global"        "$HOME/.gitignore_global"
+link_config "$DOTFILES_DIR/wayland/wayland.conf"              "$HOME/.config/environment.d/wayland.conf"
+link_config "$DOTFILES_DIR/xremap/config.yml"                 "$HOME/.config/xremap/config.yml"
+
+# ── Icono Clara Corp ──────────────────────────────────────────────────────────
+mkdir -p "$HOME/.local/share/pixmaps"
+for size in 16 24 32 48 64 96 128 256 512; do
+    mkdir -p "$HOME/.local/share/icons/hicolor/${size}x${size}/apps"
+    magick "$DOTFILES_DIR/icon/clara-glow.png" \
+        -resize "${size}x${size}" \
+        "$HOME/.local/share/icons/hicolor/${size}x${size}/apps/clara.png" 2>/dev/null
+done
+cp "$DOTFILES_DIR/icon/clara-glow.png" "$HOME/.local/share/pixmaps/clara.png"
+gtk-update-icon-cache -f "$HOME/.local/share/icons/hicolor" 2>/dev/null || true
+ok "icono clara  →  instalado en hicolor (16–512px) + pixmaps"
 
 # ─────────────────────────────────────────
-#  8. Terminal por defecto en KDE (Ghostty)
+#  10. Terminal por defecto en KDE (Ghostty)
 # ─────────────────────────────────────────
 header "── Terminal por defecto en KDE ──────────────────"
 
@@ -201,11 +263,20 @@ if command -v kwriteconfig6 &>/dev/null; then
     kwriteconfig6 --file kdeglobals --group General --key TerminalApplication ghostty
     kwriteconfig6 --file kdeglobals --group General --key TerminalService ghostty.desktop
     ok "Terminal KDE  →  ghostty"
-    info "Reinicia la sesión o ejecuta: qdbus6 org.kde.KWin /KWin reconfigure"
 else
-    warn "kwriteconfig6 no encontrado — configura la terminal por defecto manualmente:"
-    echo "  Ajustes del sistema → Aplicaciones → Aplicaciones predeterminadas → Terminal"
+    warn "kwriteconfig6 no encontrado — configura la terminal manualmente en Ajustes del sistema"
 fi
+
+# ─────────────────────────────────────────
+#  11. Andromeda Launcher (widget Plasma)
+# ─────────────────────────────────────────
+header "── Andromeda Launcher ───────────────────────────"
+
+# Andromeda Launcher es un widget de KDE Plasma preinstalado en CachyOS.
+# El widget ID varía por instalación, así que el shortcut se configura
+# manualmente: clic derecho en el widget → Configurar shortcut → Meta
+info "Andromeda Launcher es un widget Plasma — asigna la tecla Super"
+info "manualmente: clic derecho en el widget del panel → Asignar atajo"
 
 # ─────────────────────────────────────────
 #  Fin

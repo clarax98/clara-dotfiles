@@ -1,0 +1,39 @@
+# Paquetes para instalar en un sistema nuevo (CachyOS / Arch)
+# Uso: sudo pacman -S --needed $(grep -v '^#' packages.txt | grep -v '^$')
+
+# ── Terminal y shell ──────────────────────────────────────────────────────────
+ghostty
+zsh
+zsh-autosuggestions
+zsh-syntax-highlighting
+atuin
+
+# ── Prompt y herramientas CLI ─────────────────────────────────────────────────
+starship
+eza
+zoxide
+fzf
+bat
+ripgrep
+fastfetch
+
+# ── Utilidades del sistema ────────────────────────────────────────────────────
+numlockx
+git
+nano
+curl
+wget
+htop
+btop
+
+# ── Fuentes ───────────────────────────────────────────────────────────────────
+ttf-jetbrains-mono-nerd
+noto-fonts
+noto-fonts-emoji
+
+# ── KDE / entorno gráfico ─────────────────────────────────────────────────────
+# (normalmente ya vienen con CachyOS KDE edition)
+# plasma-desktop
+# kwrite
+# dolphin
+# spectacle

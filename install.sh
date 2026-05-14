@@ -86,15 +86,14 @@ else
     ok "candy-icons instalado"
 fi
 
-if [[ -d "$CURSORS_DIR/Sweet-cursors" ]]; then
+if pacman -Q sweet-cursors-git &>/dev/null || [[ -d /usr/share/icons/Sweet-cursors ]]; then
     ok "Sweet-cursors  →  ya instalado"
-else
-    info "Clonando Sweet-cursors..."
-    SWEET_TMP=$(mktemp -d)
-    git clone --depth=1 https://github.com/Gigas002/Sweet.git "$SWEET_TMP"
-    cp -r "$SWEET_TMP/Sweet-cursors" "$CURSORS_DIR/Sweet-cursors"
-    rm -rf "$SWEET_TMP"
+elif command -v paru &>/dev/null; then
+    info "Instalando sweet-cursors-git con paru (requiere build, ~2 min)..."
+    paru -S sweet-cursors-git --noconfirm
     ok "Sweet-cursors instalado"
+else
+    warn "Sweet-cursors  →  instala manualmente: paru -S sweet-cursors-git"
 fi
 
 # ─────────────────────────────────────────
